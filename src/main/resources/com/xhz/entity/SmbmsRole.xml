@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhz.dao.SmbmsRoleDao">
+	<select id="finAllRole" resultType="SmbmsRole">
+		SELECT * FROM smbms_role
+	</select>
+	<select id="findById" resultType="SmbmsRole" parameterType="int">
+		SELECT * FROM smbms_role WHERE id = #{id}
+	</select>
+	<select id="findByRoleName" resultType="SmbmsRole"
+		parameterType="string">
+		SELECT * FROM smbms_role WHERE roleName = #{roleName}
+	</select>
+	<insert id="addRole" parameterType="SmbmsRole">
+		INSERT INTO smbms_role
+		VALUES
+		(default,
+		#{roleCode},
+		#{roleName},
+		#{createdBy},
+		#{creationDate},
+		#{modifyBy},
+		#{modifyDate})
+	</insert>
+	<update id="updateRole" parameterType="SmbmsRole">
+		UPDATE smbms_role
+		<set>
+			<if test="roleCode!=null">roleCode = #{roleCode},</if>
+			<if test="roleName!=null">roleName = #{roleName},</if>
+			<if test="createdBy!=null">createdBy = #{createdBy},</if>
+			<if test="creationDate!=null">creationDate = #{creationDate},</if>
+			<if test="modifyBy!=null">modifyBy = #{modifyBy},</if>
+			<if test="modifyDate!=null">modifyDate = #{modifyDate},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delRole">
+		DELETE
+		FROM smbms_role
+		WHERE id = #{id}
+	</delete>
+</mapper>

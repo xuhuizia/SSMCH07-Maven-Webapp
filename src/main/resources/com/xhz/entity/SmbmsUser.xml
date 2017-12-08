@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhz.dao.SmbmsUserDao">
+	<insert id="addSmbmsUser" parameterType="SmbmsUser">
+		INSERT INTO smbms_user
+		(id,userCode,userName,userPassword,gender,birthday,
+		phone,address,userRole,createdBy,creationDate,modifyBy,modifyDate)
+		VALUES (#{id},#{userCode},#{userName},#{userPassword},#{gender},
+		#{birthday},#{phone},#{address},#{userRole},#{createdBy},#{creationDate},
+		#{modifyBy},#{modifyDate})
+	</insert>
+	<update id="updateSmbmsUser" parameterType="SmbmsUser">
+		UPDATE smbms_user
+		<set>
+			<if test="userCode!=null"> userCode = #{userCode},</if>
+			<if test="userName!=null"> userName = #{userName},</if>
+			<if test="userPassword!=null"> userPassword = #{userPassword},</if>
+			<if test="gender!=null"> gender = #{gender},</if>
+			<if test="birthday!=null"> birthday = #{birthday},</if>
+			<if test="phone!=null"> phone = #{phone},</if>
+			<if test="address!=null"> address = #{address},</if>
+			<if test="userRole!=null"> userRole = #{userRole},</if>
+			<if test="createdBy!=null"> createdBy = #{createdBy},</if>
+			<if test="creationDate!=null"> creationDate = #{creationDate},</if>
+			<if test="modifyBy!=null"> modifyBy = #{modifyBy},</if>
+			<if test="modifyDate!=null"> modifyDate = #{modifyDate},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delSmbmsUser" parameterType="SmbmsUser">
+		DELETE FROM smbms_user
+		WHERE id = #{id}
+	</delete>
+	<select id="findSmbmsUser" resultType="SmbmsUser" parameterType="SmbmsUser">
+		select u.*,r.roleName from smbms_user u ,smbms_role r WHERE u.userRole = r.id and userCode = #{userCode} and userPassword
+		= #{userPassword}
+	</select>
+	<select id="findSmbmsUserByCode" resultType="SmbmsUser">
+		select u.*,r.roleName from smbms_user u ,smbms_role r WHERE u.userRole = r.id 
+			<if test="userCode!=null and userCode!=''">
+				and userCode = #{userCode};
+			</if>
+			<if test="id!=null">
+				and u.id = #{id};
+			</if>
+	</select>
+	<select id="findSmbmsUsersByList" resultType="SmbmsUser">
+		SELECT u.*,r.roleName FROM smbms_user u ,smbms_role r WHERE u.userRole = r.id 
+			<if test="userName!=null and userName != ''" >
+				and userName like concat('%',#{userName},'%')
+			</if>
+			<if test="userRole!=0 and userRole != null">
+				and userRole = #{userRole}
+			</if>
+		 LIMIT #{start},#{count}
+	</select>
+	<select id="findAll" resultType="int">
+		SELECT COUNT(1) FROM smbms_user u ,smbms_role r WHERE u.userRole = r.id 
+	</select>
+	<select id="findAllUser" resultType="SmbmsUser">
+		SELECT u.*,r.roleName FROM smbms_user u ,smbms_role r WHERE u.userRole = r.id 
+			<if test="userName!=null and userName != ''">
+				and userName like concat('%',#{userName},'%')
+			</if>
+			<if test="userRole!=0 and userRole != null">
+				and userRole = #{userRole}
+			</if>
+	</select>
+	<update id="updatePassword" >
+		UPDATE smbms_user set userPassword = #{newPassword}
+		WHERE userCode = #{userCode} and userPassword = #{userPassword}
+	</update>
+</mapper>

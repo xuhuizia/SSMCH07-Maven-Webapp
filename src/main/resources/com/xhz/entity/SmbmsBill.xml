@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhz.dao.SmbmsBillDao">
+	<insert id="addSmbmsBill" parameterType="SmbmsBill">
+		INSERT INTO smbms_bill
+		VALUES (default,
+        #{billCode},
+        #{productName},
+        #{productDesc},
+        #{productUnit},
+        #{productCount},
+        #{totalPrice},
+        #{isPayment},
+        #{createdBy},
+        #{creationDate},
+        #{modifyBy},
+        #{modifyDate},
+        #{providerId})
+	</insert>
+	<update id="updateSmbmsBill" parameterType="SmbmsBill">
+		UPDATE smbms_bill
+		<set>
+			<if test="billCode!=null">billCode = #{billCode},</if>
+			<if test="productName!=null"> productName = #{productName},</if>
+			<if test="productDesc!=null"> productDesc = #{productDesc},</if>
+			<if test="productUnit!=null"> productUnit = #{productUnit},</if>
+			<if test="productCount!=null"> productCount = #{productCount},</if>
+			<if test="totalPrice!=null"> totalPrice = #{totalPrice},</if>
+			<if test="isPayment!=null"> isPayment = #{isPayment},</if>
+			<if test="createdBy!=null"> createdBy = #{createdBy},</if>
+			<if test="creationDate!=null"> creationDate = #{creationDate},</if>
+			<if test="modifyBy!=null"> modifyBy = #{modifyBy},</if>
+			<if test="modifyDate!=null"> modifyDate = #{modifyDate},</if>
+			<if test="providerId!=null"> providerId = #{providerId},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delSmbmsBill" parameterType="SmbmsBill">
+		DELETE FROM smbms_bill
+		WHERE id = #{id}
+	</delete>
+	<select id="findSmbmsBillById" resultType="SmbmsBill">
+		SELECT b.*,p.proName as providerName FROM smbms_bill b,smbms_provider p WHERE b.providerId = p.id and b.id = #{id}
+	</select>
+	<select id="findSmbmsBillsByList" resultType="SmbmsBill">
+		SELECT b.*,p.proName as providerName FROM smbms_bill b,smbms_provider p WHERE b.providerId = p.id 
+			<if test="productName!=null and productName != ''" >
+				and productName like concat('%',#{productName},'%')
+			</if>
+			<if test="providerId!=0 and providerId != null">
+				and providerId = #{providerId}
+			</if>
+			<if test="isPayment!=0 and isPayment != null">
+				and isPayment = #{isPayment}
+			</if>
+		 LIMIT #{start},#{count}
+	</select>
+	<select id="findAllBill" resultType="int">
+		SELECT COUNT(1) FROM smbms_bill
+		<where>
+			<if test="productName!=null and productName != ''">
+				and productName like concat('%',#{productName},'%')
+			</if>
+			<if test="providerId!=0 and providerId != null">
+				and providerId = #{providerId}
+			</if>
+			<if test="isPayment!=0 and isPayment != null">
+				and isPayment = #{isPayment}
+			</if>
+		</where>
+	</select>
+</mapper>

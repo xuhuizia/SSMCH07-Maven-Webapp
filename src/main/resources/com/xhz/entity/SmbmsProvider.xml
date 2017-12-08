@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhz.dao.SmbmsProviderDao">
+	<insert id="addSmbmsProvider" parameterType="SmbmsProvider">
+		INSERT INTO
+		smbms_provider
+		VALUES (#{id},#{proCode},
+		#{proName},
+		#{proDesc},
+		#{proContact},
+		#{proPhone},
+		#{proAddress},
+		#{proFax},
+		#{createdBy},
+		#{creationDate},
+		#{modifyDate},
+		#{modifyBy},
+		#{zhiZhao},
+		#{daiMa})
+	</insert>
+	<update id="updateSmbmsProvider" parameterType="SmbmsProvider">
+		UPDATE smbms_provider
+		<set>
+			<if test="proCode!=null"> proCode = #{proCode},</if>
+			<if test="proName!=null"> proName = #{proName},</if>
+			<if test="proDesc!=null">
+				proDesc = #{proDesc},</if>
+			<if test="proContact!=null"> proContact = #{proContact},</if>
+			<if test="proPhone!=null"> proPhone = #{proPhone},</if>
+			<if test="proAddress!=null">
+				proAddress = #{proAddress},</if>
+			<if test="proFax!=null"> proFax = #{proFax},</if>
+			<if test="createdBy!=null"> createdBy = #{createdBy},</if>
+			<if test="creationDate!=null"> creationDate
+				= #{creationDate},</if>
+			<if test="modifyBy!=null"> modifyBy = #{modifyBy},</if>
+			<if test="modifyDate!=null"> modifyDate = #{modifyDate},</if>
+			<if test="zhiZhao!=null"> zhiZhao = #{zhiZhao},</if>
+			<if test="daiMa!=null"> daiMa = #{daiMa},</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delSmbmsProvider" parameterType="int">
+ 	DELETE FROM smbms_provider
+	WHERE id = #{id}
+	</delete>
+	<select id="findProviderById" resultType="SmbmsProvider">
+		select * from smbms_provider where id = #{id}
+	</select>
+	<select id="findProvider" resultType="SmbmsProvider">
+		select * from smbms_provider
+	</select>
+	<select id="findSmbmsProviderByList" resultType="SmbmsProvider">
+		SELECT * FROM smbms_provider
+		<where>
+			<if test="proCode!=null and proCode != ''">
+				and proCode like
+				concat('%',#{proCode},'%')
+			</if>
+			<if test="proName!='' and proName != null">
+				and proName like concat('%',#{proName},'%')
+			</if>
+		</where>
+		 LIMIT #{start},#{count}
+	</select>
+	<select id="findAllProvider" resultType="SmbmsProvider">
+		SELECT * FROM smbms_provider
+		<where>
+			<if test="proCode!=null and proCode != ''">
+				and proCode like
+				concat('%',#{proCode},'%')
+			</if>
+			<if test="proName!='' and proName != null">
+				and proName like concat('%',#{proName},'%')
+			</if>
+		</where>
+	</select>
+	<select id="findCountById" parameterType="int" resultType="int">
+		SELECT COUNT(1) FROM smbms_provider p,smbms_bill b WHERE p.id = b.providerId AND b.providerId = #{id}
+	</select>
+</mapper>
